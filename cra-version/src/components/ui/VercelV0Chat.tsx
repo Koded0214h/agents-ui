@@ -26,9 +26,10 @@ const N8N_WEBHOOK_URL = process.env.REACT_APP_N8N_WEBHOOK_URL || "";
 const sendLogToN8n = async (logData: any) => {
     if (!N8N_WEBHOOK_URL) return;
     try {
+        // We use a "simple request" (no Content-Type header) to avoid CORS preflight (OPTIONS)
+        // n8n will still receive the JSON body and can usually parse it automatically.
         await fetch(N8N_WEBHOOK_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(logData),
         });
     } catch (error) {
